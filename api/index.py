@@ -1,11 +1,12 @@
-from flask import Flask, request, Response
+from flask import Flask, request, Response, send_from_directory
 import requests
+import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../static')
 
 @app.route('/')
-def index():
-    return app.send_static_file('index.html')
+def serve_index():
+    return send_from_directory(app.static_folder, 'index.html')
 
 @app.route('/favicon.ico')
 def favicon():
