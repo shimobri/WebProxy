@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proxy Search</title>
+    <script>
+        async function search() {
+            const query = document.getElementById('searchQuery').value;
+            const response = await fetch(`/${query}`);
+            const result = await response.text();
+            document.getElementById('result').innerText = result;
+        }
+    </script>
+</head>
+<body>
+    <h1>Proxy Search</h1>
+    <input type="text" id="searchQuery" placeholder="Enter search query">
+    <button onclick="search()">Search</button>
+    <pre id="result"></pre>
+</body>
+</html>
