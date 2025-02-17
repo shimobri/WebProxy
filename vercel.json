@@ -16,7 +16,7 @@
       "dest": "/index.html"
     },
     {
-      "src": "/api/(.*)",
+      "src": "/proxy/(.*)",
       "dest": "/api/index.py"
     }
   ]
