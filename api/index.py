@@ -7,6 +7,10 @@ app = Flask(__name__)
 def index():
     return "Welcome to the Flask Proxy Server!"
 
+@app.route('/favicon.ico')
+def favicon():
+    return '', 204
+
 @app.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def proxy(path):
     # Construct the target URL
