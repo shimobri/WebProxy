@@ -1,6 +1,7 @@
-from flask import Flask, request, Response, send_from_directory
+from flask import Flask, request, Response, send_from_directory, jsonify
 import requests
 import os
+from bs4 import BeautifulSoup
 
 app = Flask(__name__, static_folder='../static')
 
@@ -25,10 +26,16 @@ def proxy(path):
     # Make the request to the target server
     response = requests.request(method, target_url, headers=headers, data=data)
 
-    # Create a response object
-    proxy_response = Response(response.content, status=response.status_code)
-    for header in response.headers:
-        proxy_response.headers[header] = response.headers[header]
+    # Parse the HTML content
+    soup = BeautifulSoup(response.content, 'html.parser')
+    title = soup.title.string if soup.title else 'No Title'
+    body_text = soup.get_text()
+
+    # Create a JSON response
+    proxy_response = jsonify({
+        'title': title,
+        'content': body_text[:1000]  # Limit content to 1000 characters
+    })
 
     return proxy_response
 
