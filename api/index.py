@@ -12,10 +12,10 @@ def serve_index():
 def favicon():
     return '', 204
 
-@app.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+@app.route('/proxy/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def proxy(path):
     # Construct the target URL
-    target_url = f"http://example.com/{path}"
+    target_url = f"https://{path}"
     
     # Fetch the method and data from the original request
     method = request.method
