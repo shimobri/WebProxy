@@ -24,7 +24,11 @@ def proxy(path):
     headers = {key: value for key, value in request.headers if key != 'Host'}
 
     # Make the request to the target server
-    response = requests.request(method, target_url, headers=headers, data=data)
+    try:
+        response = requests.request(method, target_url, headers=headers, data=data)
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        return jsonify({'error': str(e)}), 500
 
     # Parse the HTML content
     soup = BeautifulSoup(response.content, 'html.parser')
