@@ -36,20 +36,30 @@ def proxy(path):
         logging.error(f"Request to {target_url} failed: {e}")
         return jsonify({'error': str(e)}), 500
 
-    # Parse the HTML content
-    soup = BeautifulSoup(response.content, 'html.parser')
-    title = soup.title.string if soup.title else 'No Title'
-    body_text = soup.get_text()
+    content_type = response.headers.get('Content-Type', '')
+    logging.info(f"Content-Type: {content_type}")
 
-    # Log the parsed information
-    logging.info(f"Title: {title}")
-    logging.info(f"Content length: {len(body_text)} characters")
+    if 'text/html' in content_type:
+        # Parse the HTML content
+        soup = BeautifulSoup(response.content, 'html.parser')
+        title = soup.title.string if soup.title else 'No Title'
+        body_text = soup.get_text()
 
-    # Create a JSON response
-    proxy_response = jsonify({
-        'title': title,
-        'content': body_text[:1000]  # Limit content to 1000 characters
-    })
+        # Log the parsed information
+        logging.info(f"Title: {title}")
+        logging.info(f"Content length: {len(body_text)} characters")
+
+        # Create a JSON response
+        proxy_response = jsonify({
+            'title': title,
+            'content': body_text[:1000]  # Limit content to 1000 characters
+        })
+    else:
+        # For non-HTML content, return a message indicating the type of content received
+        proxy_response = jsonify({
+            'title': 'Non-HTML Content',
+            'content': f'Received content of type {content_type}'
+        })
 
     return proxy_response
 
