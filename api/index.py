@@ -58,7 +58,7 @@ def proxy(path):
         # For non-HTML content, return a message indicating the type of content received
         proxy_response = jsonify({
             'title': 'Non-HTML Content',
-            'content': f'Received content of type {content_type}'
+            'content': f'Received content of type {content_type}. The content is not displayed here.'
         })
 
     return proxy_response
